@@ -28,6 +28,17 @@ namespace EstudoDirigidoRevitAPI
                 .Where(fs => fs.Name == "VA 13x30cm")
                 .First() as FamilySymbol;
 
+            List<ElementId> beamsIds = beams.Select(beam => beam.Id).ToList();
+
+            using (Transaction trans = new Transaction(doc))
+            {
+                trans.Start("Alterar tipo das vigas");
+
+                Element.ChangeTypeId(doc, beamsIds, familySymbol.Id);
+
+                trans.Commit();
+            }
+
             return Result.Succeeded;
         }
     }
